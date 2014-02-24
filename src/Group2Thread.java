@@ -28,8 +28,13 @@ public class Group2Thread extends Thread {
         String hash = line[1];
         for(PasswordTuple pt : computedHashes) {
             if(pt.getHash().equals(hash)) {
-                System.out.println(pt.getUser() + " " + pt.getPassword());
+                System.out.println(pt);
             }
+        }
+        try {
+            wait();
+        } catch (InterruptedException e) {
+            System.err.println(e);
         }
     }
 }

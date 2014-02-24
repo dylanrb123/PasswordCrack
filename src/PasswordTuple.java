@@ -23,4 +23,9 @@ public class PasswordTuple {
     public String getHash() {
         return hash;
     }
+
+    @Override
+    public String toString() {
+        return this.user + " " + this.password;
+    }
 }
