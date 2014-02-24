@@ -5,8 +5,9 @@
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.security.acl.Group;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -30,9 +31,11 @@ public class PasswordCrack {
         String dictionaryFileName = args[0];
         String dbFileName = args[1];
 
-        // Read the dictionary file
         ArrayList<Group1Thread> group1Threads = new ArrayList<Group1Thread>();
         ArrayList<Group2Thread> group2Threads = new ArrayList<Group2Thread>();
+        // synchronized list to keep track of hashes to check
+        List<PasswordTuple> computedHashes = Collections.synchronizedList(new ArrayList<PasswordTuple>());
+
         File dictFile = new File(dictionaryFileName);
         File dbFile = new File(dbFileName);
         Scanner dictScanner = null;
@@ -47,11 +50,11 @@ public class PasswordCrack {
         }
 
         while(dictScanner.hasNextLine()) {
-            group1Threads.add(new Group1Thread(dictScanner.nextLine()));
+            group1Threads.add(new Group1Thread(dictScanner.nextLine(),computedHashes));
         }
 
         while(dbScanner.hasNextLine()) {
-            group2Threads.add(new Group2Thread(dbScanner.nextLine()));
+            group2Threads.add(new Group2Thread(dbScanner.nextLine(),computedHashes));
         }
 
         dictScanner.close();

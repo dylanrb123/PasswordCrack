@@ -5,6 +5,8 @@
  */
 
 
+import java.util.List;
+
 /**
  * Each thread of this type compares a computed hash against all others in the database
  *
@@ -12,10 +14,22 @@
  */
 public class Group2Thread extends Thread {
 
-    private String hashToCheck;
-    private String computedHash;
+    private String lineFromFile;
+    private List<PasswordTuple> computedHashes;
 
-    public Group2Thread(String hashFromFile) {
-        hashToCheck = hashFromFile;
+    public Group2Thread(String lineFromFile, List<PasswordTuple> computedHashes) {
+        this.lineFromFile = lineFromFile;
+        this.computedHashes = computedHashes;
+    }
+
+    @Override
+    public void run() {
+        String[] line = lineFromFile.split("\\s+");
+        String hash = line[1];
+        for(PasswordTuple pt : computedHashes) {
+            if(pt.getHash().equals(hash)) {
+                System.out.println(pt.getUser() + " " + pt.getPassword());
+            }
+        }
     }
 }
