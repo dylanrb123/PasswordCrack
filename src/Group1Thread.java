@@ -1,13 +1,13 @@
 /*
  * Group1Thread.java
  *
- * File:
- *   $Id$
  *
- * Revisions:
- *   $Log$
  *
  */
+
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * Each thread of this type computes a single hash of a password to compare to the
@@ -26,6 +26,24 @@ public class Group1Thread extends Thread {
 
     @Override
     public void run() {
+        MessageDigest md = null;
+        try {
+            md = MessageDigest.getInstance ("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            System.err.println(e);
+        }
+        byte[] data = null;
+        try {
+            data = wordToHash.getBytes ("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            System.err.println(e);
+        }
+        for (int i = 0; i < 1000; i++) {
+            if(data != null) {
+                md.update (data);
+                data = md.digest();
+            }
 
+        }
     }
 }

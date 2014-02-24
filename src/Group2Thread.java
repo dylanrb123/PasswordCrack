@@ -1,11 +1,6 @@
 /*
  * Group2Thread.java
  *
- * File:
- *   $Id$
- *
- * Revisions:
- *   $Log$
  *
  */
 
@@ -17,4 +12,10 @@
  */
 public class Group2Thread extends Thread {
 
+    private String hashToCheck;
+    private String computedHash;
+
+    public Group2Thread(String hashFromFile) {
+        hashToCheck = hashFromFile;
+    }
 }

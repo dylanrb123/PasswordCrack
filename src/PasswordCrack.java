@@ -1,15 +1,11 @@
 /*
- * PassswordCrack.java
+ * PasswordCrack.java
  *
- * File:
- *   $$Id$
- *
- * Revisions:
- *   $$Log$
  */
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.security.acl.Group;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -35,8 +31,8 @@ public class PasswordCrack {
         String dbFileName = args[1];
 
         // Read the dictionary file
-        ArrayList<String> dictPasswords = new ArrayList<String>();
-        ArrayList<String> dbHashes = new ArrayList<String>();
+        ArrayList<Group1Thread> group1Threads = new ArrayList<Group1Thread>();
+        ArrayList<Group2Thread> group2Threads = new ArrayList<Group2Thread>();
         File dictFile = new File(dictionaryFileName);
         File dbFile = new File(dbFileName);
         Scanner dictScanner = null;
@@ -51,11 +47,11 @@ public class PasswordCrack {
         }
 
         while(dictScanner.hasNextLine()) {
-            dictPasswords.add(dictScanner.nextLine());
+            group1Threads.add(new Group1Thread(dictScanner.nextLine()));
         }
 
         while(dbScanner.hasNextLine()) {
-            dbHashes.add(dbScanner.nextLine());
+            group2Threads.add(new Group2Thread(dbScanner.nextLine()));
         }
 
         dictScanner.close();
