@@ -25,16 +25,18 @@ public class Group2Thread extends Thread {
     @Override
     public void run() {
         String[] line = lineFromFile.split("\\s+");
+        String user = line[0];
         String hash = line[1];
         for(PasswordTuple pt : computedHashes) {
             if(pt.getHash().equals(hash)) {
-                System.out.println(pt);
+                System.out.println(user + " " + pt.getPassword());
             }
         }
         try {
             wait();
         } catch (InterruptedException e) {
             System.err.println(e);
+            System.exit(1);
         }
     }
 }

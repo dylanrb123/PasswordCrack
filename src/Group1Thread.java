@@ -1,8 +1,6 @@
 /*
  * Group1Thread.java
  *
- *
- *
  */
 
 import java.io.UnsupportedEncodingException;
@@ -23,12 +21,8 @@ public class Group1Thread extends Thread {
     /** synchronized list of computed hashes   */
     private List<PasswordTuple> computedHashes;
 
-    private String user;
-
     public Group1Thread(String s, List<PasswordTuple> computedHashes) {
-        String[] line = s.split("\\s+");
-        wordToHash = line[2];
-        user = line[1];
+        wordToHash = s;
         this.computedHashes = computedHashes;
     }
 
@@ -39,12 +33,14 @@ public class Group1Thread extends Thread {
             md = MessageDigest.getInstance ("SHA-256");
         } catch (NoSuchAlgorithmException e) {
             System.err.println(e);
+            System.exit(1);
         }
         byte[] data = null;
         try {
             data = wordToHash.getBytes ("UTF-8");
         } catch (UnsupportedEncodingException e) {
             System.err.println(e);
+            System.exit(1);
         }
         for (int i = 0; i < 1000; i++) {
             if(data != null) {
@@ -57,8 +53,9 @@ public class Group1Thread extends Thread {
             computedHash = new String(data,"UTF-8");
         } catch (UnsupportedEncodingException e) {
             System.err.println(e);
+            System.exit(1);
         }
-        computedHashes.add(new PasswordTuple(user,wordToHash,computedHash));
+        computedHashes.add(new PasswordTuple(wordToHash,computedHash));
         notifyAll();
     }
 }

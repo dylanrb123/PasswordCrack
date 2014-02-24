@@ -47,6 +47,7 @@ public class PasswordCrack {
             dbScanner = new Scanner(dbFile);
         } catch (FileNotFoundException e){
             System.err.println(e);
+            System.exit(1);
         }
 
         while(dictScanner.hasNextLine()) {
@@ -55,6 +56,13 @@ public class PasswordCrack {
 
         while(dbScanner.hasNextLine()) {
             group2Threads.add(new Group2Thread(dbScanner.nextLine(),computedHashes));
+        }
+
+        for(Thread t : group2Threads) {
+            t.start();
+        }
+        for(Thread t : group1Threads) {
+           t.start();
         }
 
         dictScanner.close();
