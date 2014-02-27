@@ -6,8 +6,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -33,11 +31,12 @@ public class PasswordCrack {
 
         ArrayList<Group1Thread> group1Threads = new ArrayList<Group1Thread>();
         ArrayList<Group2Thread> group2Threads = new ArrayList<Group2Thread>();
-        // synchronized list to keep track of hashes to check
-        List<PasswordTuple> computedHashes = Collections.synchronizedList(new ArrayList<PasswordTuple>());
+
+        PasswordTable pTable = new PasswordTable();
 
         File dictFile = new File(dictionaryFileName);
         File dbFile = new File(dbFileName);
+
         Scanner dictScanner = null;
         Scanner dbScanner = null;
 
@@ -46,18 +45,29 @@ public class PasswordCrack {
             dictScanner = new Scanner(dictFile);
             dbScanner = new Scanner(dbFile);
         } catch (FileNotFoundException e){
-            System.err.println(e);
+            e.printStackTrace();
             System.exit(1);
         }
 
+        // build group 2 threads
         while(dictScanner.hasNextLine()) {
-            group1Threads.add(new Group1Thread(dictScanner.nextLine(),computedHashes));
+            group1Threads.add(new Group1Thread(dictScanner.nextLine(),pTable));
         }
 
+        // build group 2 threads
+        int numGroup2Threads = 0;
         while(dbScanner.hasNextLine()) {
-            group2Threads.add(new Group2Thread(dbScanner.nextLine(),computedHashes));
+            if(group2Threads.size() == 0) {
+                group2Threads.add(new Group2Thread(dbScanner.nextLine(),pTable,null));
+            } else {
+                group2Threads.add(new Group2Thread(dbScanner.nextLine(),pTable, group2Threads.get(numGroup2Threads-1)));
+            }
+            numGroup2Threads++;
         }
 
+        pTable.setMaxEntries(group1Threads.size());
+
+        // Start the threads
         for(Thread t : group2Threads) {
             t.start();
         }
