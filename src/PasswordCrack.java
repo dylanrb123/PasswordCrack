@@ -23,7 +23,7 @@ public class PasswordCrack {
     public static void main(String[] args) {
         // Print usage message if incorrect number of args
         if(args.length != 2) {
-            System.err.println("Usage: PasswordCheck dictionary db");
+            System.err.println("Usage: java PasswordCrack <dictionaryFile> <databaseFile>");
             System.exit(1);
         }
         String dictionaryFileName = args[0];
