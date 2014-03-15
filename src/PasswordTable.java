@@ -31,7 +31,8 @@ public class PasswordTable {
      * @param password the original string that got hashed.
      * @throws InterruptedException
      */
-    public synchronized void put(String computedHash, String password) throws InterruptedException {
+    public synchronized void put(String computedHash, String password) 
+            throws InterruptedException {
         theTable.put(computedHash, password);
         notifyAll();
     }
